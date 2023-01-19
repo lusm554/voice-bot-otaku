@@ -1,2 +1,6 @@
 # VIM
 *.swp
+
+# Project config
+.env
+
