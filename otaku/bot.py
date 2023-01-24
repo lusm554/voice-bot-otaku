@@ -1,32 +1,26 @@
-import discord
 import os
+import random
 from dotenv import load_dotenv
+import discord
+from discord.ext import commands
 
 load_dotenv()
 token = os.getenv("DISCORD_TOKEN")
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
 
-class BaseClient(discord.Client):
-    async def on_ready(self):
-        print(f"Logged in as {self.user} (ID: {self.user.id})")
-        print(f"Bot latency {self.latency}")
+bot = commands.Bot(command_prefix="$", intents=intents)
 
-    async def on_message(self, msg):
-        if msg.author == client.user:
-            return
+class Slapper(commands.Converter):
+    async def convert(self, ctx, argument):
+        to_slap = random.choice(ctx.guild.members)
+        return f'{ctx.author} slapped {to_slap} because *{argument}*'
 
-        if msg.content.startswith("$hello"):
-            await msg.channel.send("hello")
+@bot.command()
+async def slap(ctx, *, reason: Slapper):
+    await ctx.send(reason)
 
-        if msg.content.startswith("$connect"):
-            await msg.channel.send("connecting...")
-                
-    async def on_reaction_add(self, react, user):
-        print("reaction added!")
-
-client = BaseClient(intents=intents)
-client.run(token)
-
+bot.run(token)
 
