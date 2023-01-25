@@ -1,26 +1,19 @@
 import os
-import random
-from dotenv import load_dotenv
+import exceptions
 import discord
-from discord.ext import commands
+from dotenv import load_dotenv
 
-load_dotenv()
-token = os.getenv("DISCORD_TOKEN")
+try:
+    load_dotenv()
+    DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
+except KeyError:
+    raise exceptions.MissingEnvironmentVariable(f"Environment variable 'DISCORD_TOKEN' does not defined.")
+
+print(DISCORD_TOKEN)
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="$", intents=intents)
-
-class Slapper(commands.Converter):
-    async def convert(self, ctx, argument):
-        to_slap = random.choice(ctx.guild.members)
-        return f'{ctx.author} slapped {to_slap} because *{argument}*'
-
-@bot.command()
-async def slap(ctx, *, reason: Slapper):
-    await ctx.send(reason)
-
-bot.run(token)
+#bot.run(DISCORD_TOKEN)
 

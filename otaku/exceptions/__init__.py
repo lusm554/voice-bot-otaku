@@ -1,0 +1,3 @@
+class MissingEnvironmentVariable(Exception):
+    """Describes error of missing environment variable.""" 
+    ...
