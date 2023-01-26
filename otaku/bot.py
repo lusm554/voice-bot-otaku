@@ -30,6 +30,7 @@ class OtakuBot(commands.Bot):
     async def setup_hook(self) -> None:
         """A coroutine to be called to setup the bot, by default this is blank."""
         try:
+            await self.load_extension("cogs.admin")
             await self.load_extension("cogs.vcontrol")
         except (ExtensionFailed, ExtensionNotFound, NoEntryPointError):
             print(f"Failed to load extension cogs.vcontrol")
