@@ -17,6 +17,7 @@ INITIAL_COGS = ("cogs.admin", "cogs.vcontrol")
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.voice_states = True
 intents.members = True
 
 
