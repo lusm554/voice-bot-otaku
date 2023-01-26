@@ -6,7 +6,7 @@ class Vcontrol(commands.Cog, name="vcontrol"):
     
     @commands.command()
     async def vctl(self, ctx):
-        await ctx.send(f"Hello ")
+        await ctx.send(f"Hello world")
 
 async def setup(bot) -> None:
     await bot.add_cog(Vcontrol(bot))

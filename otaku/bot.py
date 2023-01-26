@@ -13,6 +13,7 @@ try:
 except KeyError:
     raise exceptions.MissingEnvironmentVariable(f"Environment variable 'DISCORD_TOKEN' does not defined.")
 
+INITIAL_COGS = ("cogs.admin", "cogs.vcontrol")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -29,9 +30,10 @@ class OtakuBot(commands.Bot):
 
     async def setup_hook(self) -> None:
         """A coroutine to be called to setup the bot, by default this is blank."""
+        # Load cogs or bot extentions or commands.
         try:
-            await self.load_extension("cogs.admin")
-            await self.load_extension("cogs.vcontrol")
+            for cog_name in INITIAL_COGS:
+                await self.load_extension(cog_name)
         except (ExtensionFailed, ExtensionNotFound, NoEntryPointError):
             print(f"Failed to load extension cogs.vcontrol")
 

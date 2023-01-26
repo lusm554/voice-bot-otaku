@@ -6,13 +6,20 @@ class Admin(commands.Cog, name="admin"):
     
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def reloadcog(self, ctx, *, cogname: str = None):
+    async def reloadcog(
+        self,
+        ctx, *,
+        cogname: str = commands.parameter(description="Name of cog file.")
+    ):
         """Reload all or specific cog's code."""
         try:
-            await self.bot.reload_extension("cogs.admin")
-            await self.bot.reload_extension("cogs.vcontrol")
-        except (commands.ExtensionNotLoaded, ExtensionNotFound) as error:
+            await self.bot.reload_extension(f"cogs.{cogname}")
+        except (commands.ExtensionNotLoaded, commands.ExtensionNotFound) as error:
             await ctx.send(f"Error while loading extention file.")
+        except commands.MissingRequiredArgument:
+            await ctx.send("Missing required argument.") # TODO: find why missing argument 'cogname' doesn't catch by this exception.
+        else:
+            await ctx.send(f"Reload good.")
         
 
 async def setup(bot) -> None:
