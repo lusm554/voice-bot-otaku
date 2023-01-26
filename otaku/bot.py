@@ -39,7 +39,7 @@ class OtakuBot(commands.Bot):
 
 
 bot = OtakuBot(
-    command_prefix="/",    
+    command_prefix=commands.when_mentioned_or("/"),
     intents=intents
 )
 if __name__ == "__main__":
