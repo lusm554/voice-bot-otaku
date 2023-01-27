@@ -6,4 +6,8 @@
 
 # Python
 __pycache__
+.venv
+
+# Local bash tools
+isvenv
 
