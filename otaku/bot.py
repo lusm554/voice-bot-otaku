@@ -14,8 +14,8 @@ intents.voice_states = True
 intents.members = True
 
 # TODO: 
-# Add error handling
 # Add logging
+# Add error handling
 
 
 class OtakuBot(discord.Bot):
@@ -28,20 +28,25 @@ class OtakuBot(discord.Bot):
     
     def __load_extentions__(self):
         """ Loads bot extentions, such as cogs. """
-        for cog_name in self.cogs_list:
-            status = self.load_extension(f"cogs.{cog_name}")
+        # Try to load every extention. If any exception has occured, then store it in status.
+        exts_status = self.load_extensions(*map(lambda cn: f"cogs.{cn}", self.cogs_list), store=True)
+        for ext_name, ext_status in exts_status.items():
+            try:
+                if isinstance(ext_status, Exception):
+                    raise ext_status
+            except discord.ExtensionNotFound:
+                print(f"ExtensionNotFound for {ext_name}")
+            except discord.ExtensionAlreadyLoaded:
+                print(f"ExtensionAlreadyLoaded for {ext_name}")
+            except (discord.NoEntryPointError, discord.ExtensionFailed):
+                print(f"NoEntryPointError or ExtensionFailed for {ext_name}")
+            else:
+                print(f"Extention {ext_name} loaded.")
 
     async def on_ready(self):
         print(f"Logged in as {self.user.name} (ID: {self.user.id}).")
 
 
-bot = OtakuBot(intents=intents)
-
-# @bot.slash_command(name = "ping", description = "Ping pong :)")
-# async def ping(ctx):
-#     await ctx.respond("pong!")
-
-
 if __name__ == "__main__":
+    bot = OtakuBot(intents=intents)
     bot.run(DISCORD_TOKEN)
-
