@@ -25,8 +25,9 @@ class OtakuBot(discord.Bot):
         super().__init__(*args, **kwargs)
         self.cogs_list = ["admin", "gameparty", "utils"]
         self.__load_extentions__()
+        self.start_time = discord.utils.utcnow()
     
-    def __load_extentions__(self):
+    def __load_extentions__(self) -> None:
         """ Loads bot extentions, such as cogs. """
         # Try to load every extention. If any exception has occured, then store it in status.
         exts_status = self.load_extensions(*map(lambda cn: f"cogs.{cn}", self.cogs_list), store=True)
@@ -43,9 +44,9 @@ class OtakuBot(discord.Bot):
             else:
                 print(f"Extention {ext_name} loaded.")
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
+        """ Called when the client is done preparing the data received from Discord. """
         print(f"Logged in as {self.user.name} (ID: {self.user.id}).")
-
 
 if __name__ == "__main__":
     bot = OtakuBot(intents=intents)
