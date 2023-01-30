@@ -26,6 +26,7 @@ class OtakuBot(discord.Bot):
         self.cogs_list = ["admin", "gameparty", "utils"]
         self.__load_extentions__()
         self.start_time = discord.utils.utcnow()
+        self.botname = "Otaku"
     
     def __load_extentions__(self) -> None:
         """ Loads bot extentions, such as cogs. """
@@ -46,6 +47,15 @@ class OtakuBot(discord.Bot):
 
     async def on_ready(self) -> None:
         """ Called when the client is done preparing the data received from Discord. """
+        botclient = self.user
+
+        # Try to set proper name, if not
+        if botclient.name != self.botname:
+            try:
+                await botclient.edit(username=self.botname)
+            except discord.HTTPException:
+                print("Editing your profile failed.")
+
         print(f"Logged in as {self.user.name} (ID: {self.user.id}).")
 
 if __name__ == "__main__":
