@@ -1,5 +1,6 @@
 import discord
 import os
+import exceptions
 from dotenv import load_dotenv
 
 try:
