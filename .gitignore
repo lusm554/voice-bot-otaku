@@ -3,6 +3,7 @@
 
 # Project config
 .env
+README
 
 # Python
 __pycache__
