@@ -1,8 +1,9 @@
 # Otaku bot
 
-<p align="center">
-![pylint](https://github.com/lusm554/voice-bot-otaku/actions/workflows/pylint/badge.svg)
+<p align="left">
+  <img src="https://github.com/lusm554/voice-bot-otaku/actions/workflows/pylint.yml/badge.svg" alt="Pyling badge">
 </p>
+
 
 ### Notes
 
