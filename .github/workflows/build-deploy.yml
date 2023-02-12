@@ -36,12 +36,13 @@ jobs:
 
   deploy:
     name: Deployming to yandex cloud
+    needs: push_to_registry
     runs-on: ubuntu-latest
     environment: 
       name: production
       url: https://cloud.yandex.com/en-ru/
     steps:
-      - name: Hello world
-      - run: echo "hello"
+      name: Hello world
+      run: echo "hello"
 
 
