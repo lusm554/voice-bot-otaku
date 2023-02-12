@@ -1,4 +1,4 @@
-name: Build and publish Docker image
+name: Deploy
 
 on:
   push:
@@ -42,7 +42,7 @@ jobs:
       name: production
       url: https://cloud.yandex.com/en-ru/
     steps:
-      name: Hello world
-      run: echo "hello"
+      - name: Hello world
+        run: echo "hello"
 
 
