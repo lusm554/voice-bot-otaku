@@ -4,6 +4,7 @@
 # Project config
 .env
 README
+key.json
 
 # Python
 __pycache__
