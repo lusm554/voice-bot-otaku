@@ -4,12 +4,16 @@ on:
   push:
     branches:
       - main
+environment: 
+  name: production
+  url: https://cloud.yandex.com/en-ru/
+env:
+  BOT_IMAGE: ${{ secrets.DOCKER_USERNAME }}/bot-otaku:${{ github.sha }}
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
+  build-push-bot:
+    name: Build and push image to Docker Hub
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -20,29 +24,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: loveyousomuch/otaku
-      
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.BOT_IMAGE }}
 
   deploy:
     name: Deployming to yandex cloud
     needs: push_to_registry
     runs-on: ubuntu-latest
-    environment: 
-      name: production
-      url: https://cloud.yandex.com/en-ru/
     steps:
-      - name: Hello world
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Deploy container
         run: echo "hello"
 
 
