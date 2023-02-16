@@ -1,5 +1,7 @@
 version: "3.9"
 services:
   bot:
-      env_file: .env
+      #env_file: .env
+      environment:
+        DISCORD_TOKEN: {{ env.DISCORD_TOKEN }} 
       build: .
