@@ -58,6 +58,9 @@ jobs:
           vm-name: ${{ secrets.YC_VM_NAME }}
           vm-service-account-id: ${{ secrets.YC_SERVICE_ACCOUNT_ID }}
           vm-subnet-id: ${{ secrets.YC_SUBNET_ID }}
+          vm-cores: 2
+          vm-memory: 2 GB
+          vm-core-fraction: 100
           docker-compose-path: './.github/yandex-cloud/docker-compose.yml'
           user-data-path: './.github/yandex-cloud/user-data.yml'
           
