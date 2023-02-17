@@ -14,3 +14,4 @@
 - [Why use env for prod in docker is bad idea](https://blog.diogomonica.com//2017/03/27/why-you-shouldnt-use-env-variables-for-secret-data/)
 - [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
 - [Packaging](https://docs.github.com/en/actions/publishing-packages/about-packaging-with-github-actions)
+- [how test this? We have solution, MVC!](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
