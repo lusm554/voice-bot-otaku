@@ -1,16 +1,17 @@
 import discord
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
+from views import AdminView
 
 # TODO:
 # Add errors handling
-# Add filter to owner
 
 class Admin(commands.Cog):
     """ Cog for managing bot. """
 
     def __init__(self, bot):
         self.bot = bot
+        self.view = AdminView(self.bot)
 
     cogaction = SlashCommandGroup(
         "cogaction",
@@ -25,7 +26,7 @@ class Admin(commands.Cog):
     async def reload(self, ctx, cog_name: str):
         """ Atomically reloads an extension. """
         self.bot.reload_extension(f"{self.bot.cogs_prefix}.{cog_name}")
-        await ctx.respond(f"Cog `{cog_name}` reloaded!")
+        await ctx.respond(self.view.v_reload(cog_name))
 
     @cogaction.command(
         name="load",
@@ -34,7 +35,7 @@ class Admin(commands.Cog):
     async def load(self, ctx, cog_name: str):
         """ Loads an extension. """
         self.bot.load_extension(f"{self.bot.cogs_prefix}.{cog_name}")
-        await ctx.respond(f"Cog `{cog_name}` loaded!")
+        await ctx.respond(self.view.v_load(cog_name))
 
     @cogaction.command(
         name="unload",
@@ -43,7 +44,7 @@ class Admin(commands.Cog):
     async def unload(self, ctx, cog_name: str):
         """ Unloads an extension. """
         self.bot.unload_extension(f"{self.bot.cogs_prefix}.{cog_name}")
-        await ctx.respond(f"Cog `{cog_name}` unloaded!")
+        await ctx.respond(self.view.v_unload(cog_name))
 
     async def cog_command_error(self, ctx: commands.Context, error: Exception):
         """ Handle all errors raised by commands inside that cog. """
@@ -60,8 +61,6 @@ class Admin(commands.Cog):
             await ctx.respond(f"You can't use that command.")
         else:
             await ctx.respond("An unknown error occurred while executing the command.")
-
-
 
 def setup(bot):
     bot.add_cog(Admin(bot))
