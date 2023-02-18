@@ -1,1 +1,1 @@
-The "bin" directory contains development and support files. For example, "isenv" to find out if the virtual environment is currently in use.
+The "bin" directory contains development and support scripts. For example, "isenv" to find out if the virtual environment is currently in use.
