@@ -25,6 +25,7 @@ class OtakuBot(discord.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.cogs_list = ["admin", "gameparty", "utils"]
+        self.cogs_prefix = "controllers"
         self.__load_extentions__()
         self.start_time = discord.utils.utcnow()
         self.botname = "Otaku"
@@ -32,7 +33,7 @@ class OtakuBot(discord.Bot):
     def __load_extentions__(self) -> None:
         """ Loads bot extentions, such as cogs. """
         # Try to load every extention. If any exception has occured, then store it in status.
-        exts_status = self.load_extensions(*map(lambda cn: f"controllers.{cn}", self.cogs_list), store=True)
+        exts_status = self.load_extensions(*map(lambda cn: f"{self.cogs_prefix}.{cn}", self.cogs_list), store=True)
         for ext_name, ext_status in exts_status.items():
             try:
                 if isinstance(ext_status, Exception):

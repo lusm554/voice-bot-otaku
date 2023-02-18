@@ -24,7 +24,7 @@ class Admin(commands.Cog):
     )
     async def reload(self, ctx, cog_name: str):
         """ Atomically reloads an extension. """
-        self.bot.reload_extension(f"cogs.{cog_name}")
+        self.bot.reload_extension(f"{self.bot.cogs_prefix}.{cog_name}")
         await ctx.respond(f"Cog `{cog_name}` reloaded!")
 
     @cogaction.command(
@@ -33,7 +33,7 @@ class Admin(commands.Cog):
     )   
     async def load(self, ctx, cog_name: str):
         """ Loads an extension. """
-        self.bot.load_extension(f"cogs.{cog_name}")
+        self.bot.load_extension(f"{self.bot.cogs_prefix}.{cog_name}")
         await ctx.respond(f"Cog `{cog_name}` loaded!")
 
     @cogaction.command(
@@ -42,7 +42,7 @@ class Admin(commands.Cog):
     )   
     async def unload(self, ctx, cog_name: str):
         """ Unloads an extension. """
-        self.bot.unload_extension(f"cogs.{cog_name}")
+        self.bot.unload_extension(f"{self.bot.cogs_prefix}.{cog_name}")
         await ctx.respond(f"Cog `{cog_name}` unloaded!")
 
     async def cog_command_error(self, ctx: commands.Context, error: Exception):
