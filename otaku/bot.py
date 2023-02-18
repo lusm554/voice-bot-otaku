@@ -32,7 +32,7 @@ class OtakuBot(discord.Bot):
     def __load_extentions__(self) -> None:
         """ Loads bot extentions, such as cogs. """
         # Try to load every extention. If any exception has occured, then store it in status.
-        exts_status = self.load_extensions(*map(lambda cn: f"cogs.{cn}", self.cogs_list), store=True)
+        exts_status = self.load_extensions(*map(lambda cn: f"controllers.{cn}", self.cogs_list), store=True)
         for ext_name, ext_status in exts_status.items():
             try:
                 if isinstance(ext_status, Exception):
