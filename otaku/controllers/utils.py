@@ -7,7 +7,7 @@ class Utils(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.view = UtilsView(bot)
+        self.view = UtilsView(self.bot)
 
     @discord.slash_command(
         name="ping",
