@@ -3,13 +3,11 @@
 
 # Project config
 .env
-README
+/README
+/otaku/README
 key.json
 
 # Python
 __pycache__
 .venv
-
-# Local bash tools
-isvenv
 
