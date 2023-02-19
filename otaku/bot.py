@@ -1,4 +1,5 @@
 import discord
+import logging
 from config import DiscordConfig
 
 # TODO: 
