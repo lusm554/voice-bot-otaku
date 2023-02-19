@@ -1,23 +1,9 @@
 import discord
-import os
-import exceptions
-from dotenv import load_dotenv
-
-try:
-    load_dotenv()
-    DISCORD_TOKEN = os.environ["DISCORD_TOKEN"]
-except KeyError:
-    raise exceptions.MissingEnvironmentVariable(f"Environment variable 'DISCORD_TOKEN' does not defined.")
-
-intents = discord.Intents.default()
-intents.message_content = True
-intents.voice_states = True
-intents.members = True
+from config import DiscordConfig
 
 # TODO: 
 # Add logging
 # Add error handling
-
 
 class OtakuBot(discord.Bot):
     """ Extend discord.Bot class for own configuration. """
@@ -50,16 +36,14 @@ class OtakuBot(discord.Bot):
     async def on_ready(self) -> None:
         """ Called when the client is done preparing the data received from Discord. """
         botclient = self.user
-
         # Try to set proper name, if not
         if botclient.name != self.botname:
             try:
                 await botclient.edit(username=self.botname)
             except discord.HTTPException:
                 print("Editing your profile failed.")
-
         print(f"Logged in as {self.user.name} (ID: {self.user.id}).")
 
 if __name__ == "__main__":
-    bot = OtakuBot(intents=intents)
-    bot.run(DISCORD_TOKEN)
+    bot = OtakuBot(intents=DiscordConfig.INTENTS)
+    bot.run(DiscordConfig.TOKEN)
