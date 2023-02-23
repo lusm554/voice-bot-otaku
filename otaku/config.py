@@ -1,6 +1,7 @@
 import os
 import discord
 import exceptions
+import json
 from dotenv import load_dotenv
 
 class DiscordConfig:
@@ -12,9 +13,24 @@ class DiscordConfig:
         TOKEN = os.environ["DISCORD_TOKEN"]
     except KeyError:
         raise exceptions.MissingEnvironmentVariable(f"Environment variable 'DISCORD_TOKEN' does not defined.")
-
-    # Getting bot intents
-    INTENTS = discord.Intents(message_content=True, voice_states=True, members=True)
+    # Setting bot intents
+    _INTENTS_CONF = {
+        "message_content": True,
+        "voice_states": True,
+        "members": True
+    }
+    INTENTS = discord.Intents(**_INTENTS_CONF)
+    # Dir where stores extensions/cogs
+    EXTENSIONS_DIR = "controllers"
+    EXTENSIONS_LIST = ("admin", "gameparty", "utils")
+    BOT_NAME = "Otaku"
+    # Pretty json view of config without tokens etc.
+    JSON_NO_CREDENTIALS_CONF = json.dumps({
+        "INTENTS": _INTENTS_CONF,
+        "EXTENSIONS_DIR": EXTENSIONS_DIR,
+        "EXTENSIONS_LIST": EXTENSIONS_LIST,
+        "BOT_NAME": BOT_NAME
+    }, indent=4)
 
 class DatabaseConfig:
     """ Fetches connection variables for data base. """

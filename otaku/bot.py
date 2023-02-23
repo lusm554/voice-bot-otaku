@@ -6,6 +6,7 @@ from log import get_logger
 # TODO: 
 # Add logging
 # Add error handling
+# Check bot name in guilds and in common profile
 logger = get_logger(__name__)
 
 class OtakuBot(discord.Bot):
@@ -13,17 +14,18 @@ class OtakuBot(discord.Bot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        logger.info("Initialization of bot class.")
-        self.cogs_list = ["admin", "gameparty", "utils"]
-        self.cogs_prefix = "controllers"
+        self.extensions_list = kwargs["extensions_list"]
+        self.extensions_dir = kwargs["extensions_dir"] 
+        self.bot_name = kwargs["bot_name"] 
         self.start_time = discord.utils.utcnow()
-        self.botname = "Otaku"
+        logger.info("Initialization of configuration bot class.")
+        logger.debug(f"Configuration bot class config vars:\n{DiscordConfig.JSON_NO_CREDENTIALS_CONF}")
         self.__load_extentions__()
     
     def __load_extentions__(self) -> None:
         """ Loads bot extentions, such as cogs. """
         # Try to load every extention. If any exception has occured, then store it in status.
-        exts_status = self.load_extensions(*map(lambda cn: f"{self.cogs_prefix}.{cn}", self.cogs_list), store=True)
+        exts_status = self.load_extensions(*map(lambda cn: f"{self.extensions_dir}.{cn}", self.extensions_list), store=True)
         for ext_name, ext_status in exts_status.items():
             try:
                 if isinstance(ext_status, Exception):
@@ -39,15 +41,20 @@ class OtakuBot(discord.Bot):
 
     async def on_ready(self) -> None:
         """ Called when the client is done preparing the data received from Discord. """
-        botclient = self.user
+        bot_client = self.user
         # Try to set proper name, if not
-        if botclient.name != self.botname:
+        if bot_client.name != self.bot_name:
             try:
-                await botclient.edit(username=self.botname)
+                await bot_client.edit(username=self.bot_name)
             except discord.HTTPException:
                 logger.exception("Editing bot profile failed.")
         logger.info(f"Logged in as {self.user.name} (ID: {self.user.id}).")
 
 if __name__ == "__main__":
-    bot = OtakuBot(intents=DiscordConfig.INTENTS)
-    bot.run(DiscordConfig.TOKEN)
+    bot = OtakuBot(
+        intents=DiscordConfig.INTENTS,
+        extensions_dir=DiscordConfig.EXTENSIONS_DIR,
+        extensions_list=DiscordConfig.EXTENSIONS_LIST,
+        bot_name = DiscordConfig.BOT_NAME
+    )
+    # bot.run(DiscordConfig.TOKEN)
