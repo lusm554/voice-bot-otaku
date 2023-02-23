@@ -13,11 +13,12 @@ class OtakuBot(discord.Bot):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        logger.info("Initialization of bot class.")
         self.cogs_list = ["admin", "gameparty", "utils"]
         self.cogs_prefix = "controllers"
-        self.__load_extentions__()
         self.start_time = discord.utils.utcnow()
         self.botname = "Otaku"
+        self.__load_extentions__()
     
     def __load_extentions__(self) -> None:
         """ Loads bot extentions, such as cogs. """
@@ -28,14 +29,13 @@ class OtakuBot(discord.Bot):
                 if isinstance(ext_status, Exception):
                     raise ext_status
             except discord.ExtensionNotFound:
-                print(f"ExtensionNotFound for {ext_name}")
+                logger.exception(f"ExtensionNotFound while loading extension {ext_name}.")
             except discord.ExtensionAlreadyLoaded:
-                print(f"ExtensionAlreadyLoaded for {ext_name}")
+                logger.exception(f"ExtensionAlreadyLoaded while loading extension {ext_name}.")
             except (discord.NoEntryPointError, discord.ExtensionFailed):
-                print(f"NoEntryPointError or ExtensionFailed for {ext_name}")
+                logger.exception(f"NoEntryPointError or ExtensionFailed while loading extension {ext_name}.")
             else:
-                # print(f"Extention {ext_name} loaded.")
-                logger.info(f"Extention {ext_name} loaded.")
+                logger.info(f"Loading {ext_name} extension.")
 
     async def on_ready(self) -> None:
         """ Called when the client is done preparing the data received from Discord. """
@@ -45,9 +45,9 @@ class OtakuBot(discord.Bot):
             try:
                 await botclient.edit(username=self.botname)
             except discord.HTTPException:
-                print("Editing your profile failed.")
-        print(f"Logged in as {self.user.name} (ID: {self.user.id}).")
+                logger.exception("Editing bot profile failed.")
+        logger.info(f"Logged in as {self.user.name} (ID: {self.user.id}).")
 
 if __name__ == "__main__":
     bot = OtakuBot(intents=DiscordConfig.INTENTS)
-    # bot.run(DiscordConfig.TOKEN)
+    bot.run(DiscordConfig.TOKEN)
