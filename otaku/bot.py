@@ -1,10 +1,12 @@
 import discord
 import logging
 from config import DiscordConfig
+from log import get_logger
 
 # TODO: 
 # Add logging
 # Add error handling
+logger = get_logger(__name__)
 
 class OtakuBot(discord.Bot):
     """ Extend discord.Bot class for own configuration. """
@@ -32,7 +34,8 @@ class OtakuBot(discord.Bot):
             except (discord.NoEntryPointError, discord.ExtensionFailed):
                 print(f"NoEntryPointError or ExtensionFailed for {ext_name}")
             else:
-                print(f"Extention {ext_name} loaded.")
+                # print(f"Extention {ext_name} loaded.")
+                logger.info(f"Extention {ext_name} loaded.")
 
     async def on_ready(self) -> None:
         """ Called when the client is done preparing the data received from Discord. """
@@ -47,4 +50,4 @@ class OtakuBot(discord.Bot):
 
 if __name__ == "__main__":
     bot = OtakuBot(intents=DiscordConfig.INTENTS)
-    bot.run(DiscordConfig.TOKEN)
+    # bot.run(DiscordConfig.TOKEN)
