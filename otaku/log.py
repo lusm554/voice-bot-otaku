@@ -3,7 +3,7 @@ import logging
 def get_logger(name: str = None):
     """ Generate logger by name. """
     logger = logging.getLogger(name)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter(
         f"%(asctime)s %(name)s[%(lineno)d] - %(levelname)s: %(message)s", datefmt="%m-%d-%Y %H:%M:%S %Z%z"
     )
