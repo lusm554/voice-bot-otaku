@@ -13,37 +13,37 @@ class Admin(commands.Cog):
         self.bot = bot
         self.view = AdminView(self.bot)
 
-    cogaction = SlashCommandGroup(
-        "cogaction",
+    admin_action = SlashCommandGroup(
+        "admin_action",
         "Various extension management actions.",
         checks=[commands.is_owner().predicate]
     )
 
-    @cogaction.command(
+    @admin_action.command(
         name="reload",
         description="Reloads cog by name."
     )
     async def reload(self, ctx, cog_name: str):
         """ Atomically reloads an extension. """
-        self.bot.reload_extension(f"{self.bot.cogs_prefix}.{cog_name}")
+        self.bot.reload_extension(f"{self.bot.extensions_dir}.{cog_name}")
         await ctx.respond(self.view.v_reload(cog_name))
 
-    @cogaction.command(
+    @admin_action.command(
         name="load",
         description="Loads cog by name."
     )   
     async def load(self, ctx, cog_name: str):
         """ Loads an extension. """
-        self.bot.load_extension(f"{self.bot.cogs_prefix}.{cog_name}")
+        self.bot.load_extension(f"{self.bot.extensions_list}.{cog_name}")
         await ctx.respond(self.view.v_load(cog_name))
 
-    @cogaction.command(
+    @admin_action.command(
         name="unload",
         description="Unloads cog by name."
     )   
     async def unload(self, ctx, cog_name: str):
         """ Unloads an extension. """
-        self.bot.unload_extension(f"{self.bot.cogs_prefix}.{cog_name}")
+        self.bot.unload_extension(f"{self.bot.extensions_dir}.{cog_name}")
         await ctx.respond(self.view.v_unload(cog_name))
 
     async def cog_command_error(self, ctx: commands.Context, error: Exception):
