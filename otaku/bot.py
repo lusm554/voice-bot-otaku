@@ -20,10 +20,10 @@ class OtakuBot(discord.Bot):
         self.start_time = discord.utils.utcnow()
         logger.info("Initialization of configuration bot class.")
         logger.debug(f"Configuration bot class config vars:\n{DiscordConfig.JSON_NO_CREDENTIALS_CONF}")
-        self.__load_extentions__()
+        self.__load_extensions__()
     
-    def __load_extentions__(self) -> None:
-        """ Loads bot extentions, such as cogs. """
+    def __load_extensions__(self) -> None:
+        """ Loads bot extensions, such as cogs. """
         # Try to load every extention. If any exception has occured, then store it in status.
         exts_status = self.load_extensions(*map(lambda cn: f"{self.extensions_dir}.{cn}", self.extensions_list), store=True)
         for ext_name, ext_status in exts_status.items():
@@ -53,18 +53,29 @@ class OtakuBot(discord.Bot):
                 logger.exception("Editing bot profile failed.")
         logger.info(f"Logged in as {self.user.name} (ID: {self.user.id}).")
     
-    async def on_application_command(self, ctx) -> None:
+    async def on_application_command(self, ctx: discord.ApplicationContext) -> None:
         """
         Logs user interaction with bot through app commands.
         Called when the user is send application command to bot. 
         """
-    
-        # TODO: split logs by message type!
-    
-        user_creds = ctx.author
-        channel_name = None if isinstance(ctx.channel, discord.PartialMessageable) else ctx.channel.name # PartialMessageable does not have name, only ID
-        guild_name = ctx.guild.name if ctx.guild else None # not every msg arrived through guilds, some can be from DM
-        msg = f"User '{user_creds}' send command '{ctx.command.qualified_name}' in channel '{channel_name}':{ctx.channel_id} in guild '{guild_name}':{ctx.guild_id}."
+        channel_type = None
+        channel_name = None
+        thread_name = None
+        guild_name = None
+        if isinstance(ctx.channel, discord.PartialMessageable): # msg dm
+            channel_type = "DM"
+        elif isinstance(ctx.channel, discord.abc.GuildChannel): # msg in guild channel
+            channel_type = "GUILD"
+            channel_name = ctx.channel.name
+            guild_name = ctx.guild.name
+        elif isinstance(ctx.channel, discord.Thread): # msg in guild in thread
+            channel_type = "GUILD_THREAD"
+            channel_name = ctx.channel.name
+            guild_name = ctx.guild.name
+        msg = f"From user [{ctx.author}] received command [{ctx.command.qualified_name}] in [{channel_type}] channel [{channel_name}] [{ctx.channel_id}]"
+        if channel_name:
+            msg += f" in guild [{guild_name}] [{ctx.guild_id}]"
+        msg += "."
         logger.info(msg)
 
 if __name__ == "__main__":
