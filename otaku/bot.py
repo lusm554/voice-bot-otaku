@@ -4,8 +4,6 @@ from config import DiscordConfig
 from log import get_logger
 
 # TODO: 
-# Add logging
-# Add error handling
 # Check bot name in guilds and in common profile
 logger = get_logger(__name__)
 
