@@ -40,7 +40,10 @@ class OtakuBot(discord.Bot):
                 logger.info(f"Loading {ext_name} extension.")
 
     async def on_ready(self) -> None:
-        """ Called when the client is done preparing the data received from Discord. """
+        """ 
+        Verify bot name.
+        Called when the client is done preparing the data received from Discord. 
+        """
         bot_client = self.user
         # Try to set proper name, if not
         if bot_client.name != self.bot_name:
@@ -49,6 +52,20 @@ class OtakuBot(discord.Bot):
             except discord.HTTPException:
                 logger.exception("Editing bot profile failed.")
         logger.info(f"Logged in as {self.user.name} (ID: {self.user.id}).")
+    
+    async def on_application_command(self, ctx) -> None:
+        """
+        Logs user interaction with bot through app commands.
+        Called when the user is send application command to bot. 
+        """
+    
+        # TODO: split logs by message type!
+    
+        user_creds = ctx.author
+        channel_name = None if isinstance(ctx.channel, discord.PartialMessageable) else ctx.channel.name # PartialMessageable does not have name, only ID
+        guild_name = ctx.guild.name if ctx.guild else None # not every msg arrived through guilds, some can be from DM
+        msg = f"User '{user_creds}' send command '{ctx.command.qualified_name}' in channel '{channel_name}':{ctx.channel_id} in guild '{guild_name}':{ctx.guild_id}."
+        logger.info(msg)
 
 if __name__ == "__main__":
     bot = OtakuBot(
@@ -57,4 +74,4 @@ if __name__ == "__main__":
         extensions_list=DiscordConfig.EXTENSIONS_LIST,
         bot_name = DiscordConfig.BOT_NAME
     )
-    # bot.run(DiscordConfig.TOKEN)
+    bot.run(DiscordConfig.TOKEN)

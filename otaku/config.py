@@ -18,7 +18,8 @@ class DiscordConfig:
     _INTENTS_CONF = {
         "message_content": True,
         "voice_states": True,
-        "members": True
+        "members": True,
+        "guilds": True
     }
     INTENTS = discord.Intents(**_INTENTS_CONF)
     # Dir where stores extensions/cogs
