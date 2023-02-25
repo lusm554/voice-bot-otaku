@@ -16,6 +16,7 @@ class OtakuBot(discord.Bot):
         self.extensions_dir = kwargs["extensions_dir"] 
         self.bot_name = kwargs["bot_name"] 
         self.start_time = discord.utils.utcnow()
+        self.cogs_with_cmd_group = ("Admin")
         logger.info("Initialization of configuration bot class.")
         logger.debug(f"Configuration bot class config vars:\n{DiscordConfig.JSON_NO_CREDENTIALS_CONF}")
         self.__load_extensions__()
@@ -56,25 +57,31 @@ class OtakuBot(discord.Bot):
         Logs user interaction with bot through app commands.
         Called when the user is send application command to bot. 
         """
-        channel_type = None
-        channel_name = None
-        thread_name = None
-        guild_name = None
-        if isinstance(ctx.channel, discord.PartialMessageable): # msg dm
-            channel_type = "DM"
-        elif isinstance(ctx.channel, discord.abc.GuildChannel): # msg in guild channel
-            channel_type = "GUILD"
-            channel_name = ctx.channel.name
-            guild_name = ctx.guild.name
-        elif isinstance(ctx.channel, discord.Thread): # msg in guild in thread
-            channel_type = "GUILD_THREAD"
-            channel_name = ctx.channel.name
-            guild_name = ctx.guild.name
-        msg = f"From user [{ctx.author}] received command [{ctx.command.qualified_name}] in [{channel_type}] channel [{channel_name}] [{ctx.channel_id}]"
-        if channel_name:
-            msg += f" in guild [{guild_name}] [{ctx.guild_id}]"
-        msg += "."
-        logger.info(msg)
+        try:
+            channel_type = None
+            channel_name = None
+            thread_name = None
+            guild_name = None
+            if isinstance(ctx.channel, discord.PartialMessageable): # msg dm
+                channel_type = "DM"
+            elif isinstance(ctx.channel, discord.abc.GuildChannel): # msg in guild channel
+                channel_type = "GUILD"
+                channel_name = ctx.channel.name
+                guild_name = ctx.guild.name
+            elif isinstance(ctx.channel, discord.Thread): # msg in guild in thread
+                channel_type = "GUILD_THREAD"
+                channel_name = ctx.channel.name
+                guild_name = ctx.guild.name
+            msg = f"From user [{ctx.author}] [{ctx.author.id}] received command [{ctx.command.qualified_name}] in [{channel_type}] channel [{channel_name}] [{ctx.channel_id}]"
+            if channel_name:
+                msg += f" in guild [{guild_name}] [{ctx.guild_id}]"
+            if not type(ctx.cog).__name__ in self.cogs_with_cmd_group:
+                msg += f" with selected options [{ctx.selected_options}]"
+                msg += f" with unselected options [{ctx.unselected_options}]"
+            msg += "."
+            logger.info(msg)
+        except:
+            logger.exception(f"Unexpected error while logging.")
 
 if __name__ == "__main__":
     bot = OtakuBot(
