@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
 from views import UtilsView
+from log import get_logger
+
+logger = get_logger(__name__)
 
 class Utils(commands.Cog):
     """ Information about bot status. """
@@ -31,7 +34,7 @@ class Utils(commands.Cog):
         error: Exception 
     ):
         """ Handle all errors raised by commands inside that cog. """
-        print(f"Error in {ctx.command.qualified_name}: {error}") 
+        logger.error(f"In cmd [{ctx.command.qualified_name}] {error}") 
         await ctx.respond("An unknown error occurred while executing the command.")
 
 def setup(bot):

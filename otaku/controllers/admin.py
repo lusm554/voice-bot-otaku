@@ -2,9 +2,9 @@ import discord
 from discord.commands import SlashCommandGroup
 from discord.ext import commands
 from views import AdminView
+from log import get_logger
 
-# TODO:
-# Add errors handling
+logger = get_logger(__name__)
 
 class Admin(commands.Cog):
     """ Cog for managing bot. """
@@ -48,7 +48,7 @@ class Admin(commands.Cog):
 
     async def cog_command_error(self, ctx: commands.Context, error: Exception):
         """ Handle all errors raised by commands inside that cog. """
-        print(f"Error in {ctx.command.qualified_name}: {error}") 
+        logger.error(f"In cmd [{ctx.command.qualified_name}] {error}") 
         if isinstance(error, discord.ExtensionNotLoaded):
             await ctx.respond(f"ExtensionNotLoaded")
         elif isinstance(error, discord.ExtensionNotFound):
