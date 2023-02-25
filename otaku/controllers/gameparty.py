@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 from views import GamepartyView
 
+# add parameter name of party action
+
 class GameParty(commands.Cog):
     """ Cog for managing game party. """
 
