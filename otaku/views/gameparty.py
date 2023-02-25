@@ -1,7 +1,10 @@
 import discord
+from log import get_logger
+
+logger = get_logger(__name__)
 
 class StackView(discord.ui.View):
-    """ Generate buttons accept and denie. """
+    """ Generate buttons accept and deny. """
 
     def __init__(self):
         hour_in_seconds = 60 * 60
@@ -9,8 +12,9 @@ class StackView(discord.ui.View):
         super().__init__(timeout=hour_in_seconds)
 
     @discord.ui.button(label="Accept", style=discord.ButtonStyle.primary, custom_id="accept_button")
-    async def button_accept(self, button, interaction):
-        """ Button for addind player to embed game stack. """
+    async def accept_button(self, button: discord.ui.Button, interaction: discord.Interaction):
+        """ Button for adding player to embed game stack. """
+        logger.info(f"Button accept clicked by [{interaction.user}] in msg [{interaction.message.id}]")
         if len(interaction.message.embeds) == 0:
             return await interaction.response.send_message("Embed not found. Interaction failed.")
         embed = interaction.message.embeds[0]
@@ -21,9 +25,10 @@ class StackView(discord.ui.View):
         players = set([interaction.user.mention, *players])
         await interaction.response.edit_message(view=self, embed=GamepartyView.generate_embed(players))
 
-    @discord.ui.button(label="Denie", style=discord.ButtonStyle.primary)
-    async def button_denie(self, button, interaction):
+    @discord.ui.button(label="Deny", style=discord.ButtonStyle.primary)
+    async def deny_button(self, button: discord.ui.Button, interaction: discord.Interaction):
         """ Button for removing player from embed game stack. """
+        logger.info(f"Button deny clicked by [{interaction.user}] in msg [{interaction.message.id}]")
         if len(interaction.message.embeds) == 0:
             return await interaction.response.send_message("Embed not found. Interaction failed.")
         if accept_button := [ch for ch in self.children if ch.custom_id == "accept_button"][0]:
