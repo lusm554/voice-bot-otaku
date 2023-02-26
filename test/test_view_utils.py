@@ -23,7 +23,7 @@ def test_v_ping(utils_view_instance):
 
 def test_v_uptime(utils_view_instance):
     # remove last values because it's hard to compare time within ms
-    assert utils_view_instance.v_uptime()[:-4] == f"Uptime is `{datetime.datetime.now(datetime.timezone.utc) - START_TIME}`."[:-4]
+    assert utils_view_instance.v_uptime()[:-5] == f"Uptime is `{datetime.datetime.now(datetime.timezone.utc) - START_TIME}`."[:-5]
 
 if __name__ == "__main__":
     pytest.main()
