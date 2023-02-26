@@ -1,5 +1,5 @@
 import logging
-from .config import LoggingConfig
+from config import LoggingConfig
 
 def get_logger(name: str = None) -> logging.Logger:
     """ Generate logger by name. """

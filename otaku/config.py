@@ -1,6 +1,6 @@
 import os
 import discord
-from . import exceptions
+import exceptions
 import json
 import logging
 from dotenv import load_dotenv
